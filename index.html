@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <title>Иностранные языки</title>
+  <meta name="theme-color" content="#f3f6fb">
+  <title>Запись на занятия — Иностранные языки</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -13,41 +14,22 @@
     <header class="hero">
       <div class="hero-icon" aria-hidden="true">🌍</div>
       <p class="eyebrow">LANGUAGE STUDIO</p>
-      <h1>Какой язык<br>хотите изучать?</h1>
-      <p class="subtitle">Выберите направление — мы поможем подобрать занятия и преподавателя.</p>
+      <div class="progress-track" aria-label="Прогресс заполнения">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="step-count" id="step-count">Шаг 1 из 6</p>
+      <h1 id="step-title">Какой язык<br>хотите изучать?</h1>
+      <p class="subtitle" id="step-description">Выберите направление — мы поможем подобрать занятия и преподавателя.</p>
     </header>
 
-    <section class="language-grid" aria-label="Доступные иностранные языки">
-      <button class="language-card" type="button" data-language="en" aria-pressed="false">
-        <span class="flag-wrap"><img src="assets/gb.svg" alt="Флаг Великобритании"></span>
-        <span class="language-name">Английский</span>
-        <span class="language-description">English</span>
-        <span class="check-mark" aria-hidden="true">✓</span>
-      </button>
-      <button class="language-card" type="button" data-language="de" aria-pressed="false">
-        <span class="flag-wrap"><img src="assets/de.svg" alt="Флаг Германии"></span>
-        <span class="language-name">Немецкий</span>
-        <span class="language-description">Deutsch</span>
-        <span class="check-mark" aria-hidden="true">✓</span>
-      </button>
-      <button class="language-card" type="button" data-language="fr" aria-pressed="false">
-        <span class="flag-wrap"><img src="assets/fr.svg" alt="Флаг Франции"></span>
-        <span class="language-name">Французский</span>
-        <span class="language-description">Français</span>
-        <span class="check-mark" aria-hidden="true">✓</span>
-      </button>
-      <button class="language-card" type="button" data-language="es" aria-pressed="false">
-        <span class="flag-wrap"><img src="assets/es.svg" alt="Флаг Испании"></span>
-        <span class="language-name">Испанский</span>
-        <span class="language-description">Español</span>
-        <span class="check-mark" aria-hidden="true">✓</span>
-      </button>
-    </section>
+    <section class="step-content" id="step-content" aria-live="polite" aria-label="Анкета записи на занятия"></section>
 
-    <p class="hint" id="hint">Нажмите на карточку, чтобы выбрать язык.</p>
-    <button class="browser-submit" id="browser-submit" type="button" disabled>Подтвердить выбор</button>
+    <div class="nav-actions">
+      <button class="back-button" id="back-button" type="button" hidden>← Назад</button>
+      <button class="browser-submit" id="browser-submit" type="button" disabled>Продолжить</button>
+    </div>
     <p class="status-message" id="status-message" role="status" aria-live="polite"></p>
-    <footer>Выбор будет передан вашему Telegram-боту.</footer>
+    <footer>Заполнение анкеты · Оплата в тестовом режиме</footer>
   </main>
   <script src="app.js"></script>
 </body>
