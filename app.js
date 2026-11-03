@@ -37,14 +37,14 @@
   ];
   const LESSONS_PER_WEEK = [1, 2, 3, 4, 5];
   const DURATIONS = [45, 60, 90];
-  const STEPS = ["language", "lessons", "duration", "teacher", "summary", "payment"];
+  const STEPS = ["language", "lessons", "duration", "teacher", "payment", "summary"];
   const STEP_TEXT = [
     { title: "Какой язык хотите изучать?", description: "Выберите направление — затем укажите расписание и преподавателя." },
     { title: "Сколько занятий в неделю?", description: "Выберите желаемую интенсивность обучения." },
     { title: "Длительность занятия", description: "Выберите продолжительность одного урока." },
     { title: "Выберите преподавателя", description: "Стоимость указана за 60 минут. Для каждого языка доступны свои преподаватели." },
-    { title: "Проверьте заявку", description: "Проверьте выбранные параметры и подтвердите заявку перед оплатой." },
-    { title: "Способ оплаты", description: "Выберите способ оплаты. Все реквизиты в этом учебном проекте тестовые." }
+    { title: "Способ оплаты", description: "Выберите способ оплаты для тестового завершения заявки." },
+    { title: "Проверьте заявку", description: "Проверьте выбранные параметры и подтвердите заявку." }
   ];
 
   const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -114,7 +114,7 @@
   function primaryLabel() {
     switch (STEPS[state.step]) {
       case "summary": return "Подтвердить заявку";
-      case "payment": return "Перейти к оплате";
+      case "payment": return "Продолжить";
       default: return "Продолжить";
     }
   }
@@ -192,7 +192,7 @@
       <div class="summary-total"><span>В неделю</span><span>${money(weekly)}</span></div>
       <div class="summary-total"><span>За 4 недели</span><span>${money(weekly * 4)}</span></div>
     </div>
-    <p class="notice">Имя, телефон и email уже указаны в анкете Telegram-бота. После подтверждения заявка сохранится, и бот предложит выбрать способ оплаты.</p>`;
+    <p class="notice">Имя, телефон и email уже указаны в анкете Telegram-бота. Нажмите «Подтвердить заявку», чтобы отправить её в чат и завершить тестовую оплату.</p>`;
   }
 
   function paymentMarkup() {
@@ -202,7 +202,7 @@
         <span class="choice-subtitle">${method.subtitle}</span>
         <span class="choice-check" aria-hidden="true">✓</span>
       </button>`).join("")}</div>
-      <p class="notice">После отправки анкеты Telegram-бот покажет учебные реквизиты и кнопку проверки оплаты. Реальные деньги не списываются.</p>`;
+      <p class="notice">Выбранный способ оплаты будет указан в заявке. После подтверждения бот отправит заявку в чат и покажет успешную тестовую оплату. Реальные деньги не списываются.</p>`;
   }
 
   function bindChoices() {
@@ -231,7 +231,7 @@
     const meta = STEP_TEXT[state.step];
     title.textContent = meta.title;
     description.textContent = meta.description;
-    content.innerHTML = [languageMarkup, lessonsMarkup, durationMarkup, teacherMarkup, summaryMarkup, paymentMarkup][state.step]();
+    content.innerHTML = [languageMarkup, lessonsMarkup, durationMarkup, teacherMarkup, paymentMarkup, summaryMarkup][state.step]();
     bindChoices();
     updateControls();
   }
@@ -248,8 +248,12 @@
       statusMessage.textContent = "Сначала выберите один из вариантов.";
       return;
     }
+    if (STEPS[state.step] === "summary") {
+      state.confirmed = true;
+      sendForm();
+      return;
+    }
     if (state.step < STEPS.length - 1) {
-      if (STEPS[state.step] === "summary") state.confirmed = true;
       state.step += 1;
       statusMessage.textContent = "";
       render();
@@ -284,3 +288,4 @@
   backButton.addEventListener("click", goBack);
   render();
 })();
+
