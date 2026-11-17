@@ -1,35 +1,41 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f3f6fb">
-  <title>Запись на занятия — Иностранные языки</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f6fb">
+  <title>LinguaStart — запись на занятия</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js?65"></script>
 </head>
 <body>
   <main class="app-shell">
-    <header class="hero">
-      <div class="hero-icon" aria-hidden="true">🌍</div>
-      <p class="eyebrow">LANGUAGE STUDIO</p>
-      <div class="progress-track" aria-label="Прогресс заполнения">
-        <div class="progress-fill" id="progress-fill"></div>
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">L</div>
+      <div>
+        <div class="brand-name">LinguaStart</div>
+        <div class="brand-caption">Заявка на занятия</div>
       </div>
-      <p class="step-count" id="step-count">Шаг 1 из 6</p>
-      <h1 id="step-title">Какой язык<br>хотите изучать?</h1>
-      <p class="subtitle" id="step-description">Выберите направление — мы поможем подобрать занятия и преподавателя.</p>
+      <div class="step-counter" id="stepCounter">1 / 6</div>
     </header>
 
-    <section class="step-content" id="step-content" aria-live="polite" aria-label="Анкета записи на занятия"></section>
+    <section class="progress" aria-label="Прогресс заполнения">
+      <div class="progress-fill" id="progressFill"></div>
+    </section>
 
-    <div class="nav-actions">
-      <button class="back-button" id="back-button" type="button" hidden>← Назад</button>
-      <button class="browser-submit" id="browser-submit" type="button" disabled>Продолжить</button>
+    <section class="intro">
+      <p class="eyebrow">ИНОСТРАННЫЕ ЯЗЫКИ</p>
+      <h1 id="pageTitle">Начнём знакомство</h1>
+      <p class="intro-text" id="pageSubtitle">Оставьте заявку на обучение — это займёт всего пару минут.</p>
+    </section>
+
+    <section id="screen" class="screen" aria-live="polite"></section>
+
+    <div class="local-note" id="localNote" hidden>
+      Предварительный просмотр. Для отправки заявки откройте приложение через Telegram.
     </div>
-    <p class="status-message" id="status-message" role="status" aria-live="polite"></p>
-    <footer>Заполнение анкеты · Оплата в тестовом режиме</footer>
+
+    <footer class="footer-note">Подберём удобный формат обучения и преподавателя</footer>
   </main>
   <script src="app.js"></script>
 </body>
