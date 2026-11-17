@@ -18,6 +18,17 @@ const LANGUAGES = [
 ];
 
 // Демонстрационный список преподавателей. Его можно заменить на актуальный список.
+// Демонстрационные цены в рублях за одно занятие.
+// При необходимости замените суммы здесь и в PRICES_RUB в bot.py.
+const PRICES_RUB = {
+  'Английский': { 30: 450, 45: 650, 60: 850, 90: 1200 },
+  'Немецкий':    { 30: 500, 45: 700, 60: 900, 90: 1300 },
+  'Французский': { 30: 550, 45: 750, 60: 1000, 90: 1450 },
+  'Испанский':   { 30: 450, 45: 650, 60: 850, 90: 1200 },
+  'Китайский':   { 30: 650, 45: 900, 60: 1200, 90: 1750 },
+  'Японский':    { 30: 650, 45: 900, 60: 1200, 90: 1750 }
+};
+
 const TEACHERS = [
   { name: 'Анна Смирнова', language: 'Английский', detail: 'Разговорный английский · 5 лет опыта', avatar: '👩🏻‍🏫' },
   { name: 'Марк Уилсон', language: 'Английский', detail: 'Английский для учёбы и работы · 7 лет опыта', avatar: '👨🏼‍🏫' },
@@ -52,6 +63,30 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
+}
+
+function formatMoney(amount) {
+  return `${Number(amount).toLocaleString('ru-RU')} ₽`;
+}
+
+function getPricing() {
+  const perLesson = PRICES_RUB[state.language]?.[state.durationMinutes];
+  if (!perLesson || !state.lessonsPerWeek) {
+    throw new Error('Не удалось определить стоимость выбранного занятия.');
+  }
+  const perWeek = perLesson * state.lessonsPerWeek;
+  return { perLesson, perWeek, perFourWeeks: perWeek * 4 };
+}
+
+function pricePreviewMarkup() {
+  const price = getPricing();
+  return `
+    <div class="price-preview">
+      <div class="price-preview-title">Стоимость выбранного формата</div>
+      <div class="price-preview-row"><span>Одно занятие</span><strong>${formatMoney(price.perLesson)}</strong></div>
+      <div class="price-preview-row"><span>В неделю (${state.lessonsPerWeek} зан.)</span><strong>${formatMoney(price.perWeek)}</strong></div>
+      <div class="price-preview-row price-preview-total"><span>За 4 недели</span><strong>${formatMoney(price.perFourWeeks)}</strong></div>
+    </div>`;
 }
 
 function updateTelegramMainButton() {
@@ -143,6 +178,7 @@ function renderDuration() {
 function renderTeacher() {
   const available = TEACHERS.filter((teacher) => teacher.language === state.language);
   screen.innerHTML = `
+    ${available.length ? pricePreviewMarkup() : '<p class="helper">Для выбранного языка пока нет преподавателей.</p>'}
     <div class="option-list">
       ${available.map((teacher) => `
         <button class="option-card teacher-card ${state.teacher === teacher.name ? 'selected' : ''}" data-action="teacher" data-value="${escapeHtml(teacher.name)}">
@@ -155,12 +191,16 @@ function renderTeacher() {
 }
 
 function renderSummary() {
+  const price = getPricing();
   const values = [
     ['Имя', state.name],
     ['Язык', state.language],
     ['Занятий в неделю', String(state.lessonsPerWeek)],
     ['Длительность', `${state.durationMinutes} минут`],
-    ['Преподаватель', state.teacher]
+    ['Преподаватель', state.teacher],
+    ['Стоимость одного занятия', formatMoney(price.perLesson)],
+    ['Стоимость в неделю', formatMoney(price.perWeek)],
+    ['Стоимость за 4 недели', formatMoney(price.perFourWeeks)]
   ];
   screen.innerHTML = `
     <div class="summary-card">
@@ -206,7 +246,11 @@ function buildApplication() {
     language: state.language,
     lessons_per_week: state.lessonsPerWeek,
     lesson_duration_minutes: state.durationMinutes,
-    teacher: state.teacher
+    teacher: state.teacher,
+    // Стоимость для предварительного отображения; бот самостоятельно пересчитывает её.
+    price_per_lesson_rub: getPricing().perLesson,
+    price_per_week_rub: getPricing().perWeek,
+    price_per_four_weeks_rub: getPricing().perFourWeeks
   };
 }
 
