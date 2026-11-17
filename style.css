@@ -83,6 +83,16 @@ h1 { margin: 0; font-size: clamp(25px, 6vw, 31px); line-height: 1.14; letter-spa
 .teacher-card { align-items: flex-start; }
 .teacher-avatar { width: 40px; height: 40px; display: grid; place-items: center; flex: 0 0 40px; border-radius: 50%; background: var(--soft); font-size: 18px; }
 
+.price-preview {
+  margin: 14px 0 17px; padding: 14px 16px; border: 1px solid var(--line);
+  border-radius: 16px; background: var(--card-bg); box-shadow: var(--shadow);
+}
+.price-preview-title { margin-bottom: 8px; font-size: 13px; font-weight: 800; }
+.price-preview-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; color: var(--muted); font-size: 12px; }
+.price-preview-row strong { color: var(--text); font-size: 13px; white-space: nowrap; }
+.price-preview-total { margin-top: 3px; padding-top: 11px; border-top: 1px solid var(--line); color: var(--text); font-weight: 800; }
+.price-preview-total strong { color: var(--accent); font-size: 15px; }
+
 .summary-card { padding: 5px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card-bg); box-shadow: var(--shadow); }
 .summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); }
 .summary-row:last-child { border-bottom: 0; }
